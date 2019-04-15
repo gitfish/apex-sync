@@ -69,15 +69,21 @@ public class RemoteDatabase {
         String loginUrl;
         String consumerKey;
         String instanceUrl;
+        String certName;
         private String accessToken;
         private List<VersionInfo> allVersionsInternal;
         private VersionInfo latestVersionInternal;
         public Client() {}
-        public Client(String username, String loginUrl, String consumerKey, String instanceUrl) {
+        public Client(String username,
+                      String loginUrl,
+                      String consumerKey,
+                      String instanceUrl,
+                      String certName) {
             this.username = username;
             this.loginUrl = loginUrl;
             this.consumerKey = consumerKey;
             this.instanceUrl = instanceUrl;
+            this.certName = certName;
         }
         private void setupRequest(HttpRequest req) {
             req.setHeader('Authorization', 'Bearer ' + accessToken);
@@ -89,7 +95,7 @@ public class RemoteDatabase {
                 jwt.setAud(this.loginUrl);
                 jwt.setIss(this.consumerKey);
 
-                Auth.JWS jws = new Auth.JWS(jwt, 'Apex_Sync');
+                Auth.JWS jws = new Auth.JWS(jwt, certName);
 
                 String tokenEndpoint = this.loginUrl + '/services/oauth2/token';
 
